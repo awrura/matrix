@@ -35,3 +35,6 @@
 CMakeListsPrivate.txt
 cmake-build-*/
 .idea
+
+# Configruation file
+src/config.h
