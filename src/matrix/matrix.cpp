@@ -6,26 +6,21 @@ LedMatrix::LedMatrix() {
 
 void LedMatrix::setColor(byte height, byte width, CRGB color) {
     byte index = calculateIndex(height, width);
-
-    this->leds[index] = color;
+    this->setColor(index, color);
 }
-
 
 void LedMatrix::setColor(byte index, CRGB color) {
     this->leds[index] = color;
 }
 
 void LedMatrix::redraw() {
+    /// It's necessary to call .show() twice
     FastLED.show();
     FastLED.show();
 }
 
 void LedMatrix::clear() {
-    for (int i = 0; i < N_LEDS; i++) {
-        if (leds[i].r > 0 || leds[i].g > 0 || leds[i].b > 0) {
-            leds[i] = CRGB(0, 0, 0);
-        }
-    }
+    fill_solid(leds, N_LEDS, CRGB(0, 0, 0));
     redraw();
 }
 

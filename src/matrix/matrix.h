@@ -27,10 +27,6 @@ public:
 
     static void redraw();
 
-    CRGB *get() {
-        return leds;
-    }
-
 private:
     static byte calculateIndex(byte height, byte width);
 };
