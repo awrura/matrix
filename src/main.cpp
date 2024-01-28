@@ -29,8 +29,11 @@ void setup_wifi() {
 
 void callback(char *topic, byte *payload, unsigned int length) {
     Serial.println("Message arrived");
+    Serial.print("MESSAGE SIZE:");
+    Serial.println(length);
     for (int i = 0; i < length; i++) {
-        Serial.print((char) payload[i]);
+        Serial.print(payload[i]);
+        Serial.print(" ");
     }
     Serial.println();
 }
@@ -57,6 +60,7 @@ void setup() {
     setup_wifi();
     client.setServer(MQTT_SERVER_IP, MQTT_SERVER_PORT);
     client.setCallback(callback);
+    client.setBufferSize(2048);
 }
 
 void loop() {
