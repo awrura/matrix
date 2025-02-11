@@ -7,15 +7,26 @@
 // see more details here https://alexgyver.ru/matrix_guide/     |
 // -------------------------------------------------------------
 
-constexpr uint8_t WIDTH = 16;              // ширина матрицы
-constexpr uint8_t HEIGHT = 16;             // высота матрицы
+// ---------------------------------------------------------------
+//                      GENERAL SETTINGS                         |
+// ---------------------------------------------------------------
+constexpr uint8_t WIDTH = 16;
+constexpr uint8_t HEIGHT = 16;
 constexpr uint8_t PIN = D8;
 constexpr uint16_t NUM_PIXELS = WIDTH * HEIGHT;
+constexpr uint8_t BRIGHTNESS = 40;
 
-constexpr uint8_t SEGMENTS = 1;            // диодов в одном "пикселе"
-constexpr uint8_t MATRIX_TYPE = 0;         // тип матрицы: 0 - зигзаг, 1 - последовательная
-constexpr uint8_t CONNECTION_ANGLE = 0;    // угол подключения: 0 - левый нижний, 1 - левый верхний, 2 - правый верхний, 3 - правый нижний
-constexpr uint8_t STRIP_DIRECTION = 1;     // направление ленты: 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
+// ---------------------------------------------------------------
+//                      INDEXING SETTINGS                        |
+// ---------------------------------------------------------------
+// диодов в одном "пикселе"
+constexpr uint8_t SEGMENTS = 1;
+// тип матрицы: 0 - зигзаг, 1 - последовательная
+constexpr uint8_t MATRIX_TYPE = 0;
+// угол подключения: 0 - л.н., 1 - л.в., 2 - п.в., 3 - п.н.
+constexpr uint8_t CONNECTION_ANGLE = 0;
+// направление ленты: 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
+constexpr uint8_t STRIP_DIRECTION = 1;
 
 constexpr uint8_t calc_width(uint8_t connectionAngle, uint8_t stripDirection) {
     return ((connectionAngle == 0 || connectionAngle == 3) && stripDirection % 2 == 0) ||
@@ -54,19 +65,30 @@ constexpr int16_t calc_this_y(int16_t x, int16_t y) {
     }
 }
 
+// ---------------------------------------------------------------
+//                      END SETTINGS                             |
+// ---------------------------------------------------------------
+
+
 LedMatrix::LedMatrix(): matrix(NUM_PIXELS, PIN, NEO_GRB + NEO_KHZ800) {}
 
 void LedMatrix::begin() {
     matrix.begin();
+    matrix.setBrightness(BRIGHTNESS);
 }
 
 void LedMatrix::setColor(uint8_t width, uint8_t height, uint8_t red, uint8_t green, uint8_t blue) {
-    uint16_t index = calculateIndex(width, height);
+    uint16_t index = calculateIndex(height, width);
     this->setColor(index, red, green, blue);
 }
 
 void LedMatrix::setColor(uint16_t index, uint8_t red, uint8_t green, uint8_t blue) {
-    matrix.setPixelColor(index, red, green, blue);
+    matrix.setPixelColor(
+        index,
+        matrix.gamma8(red),
+        matrix.gamma8(green), 
+        matrix.gamma8(blue)
+    );
 }
 
 void LedMatrix::redraw() {
