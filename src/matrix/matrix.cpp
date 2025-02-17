@@ -74,7 +74,11 @@ LedMatrix::LedMatrix(): matrix(NUM_PIXELS, PIN, NEO_GRB + NEO_KHZ800) {}
 
 void LedMatrix::begin() {
     matrix.begin();
-    matrix.setBrightness(BRIGHTNESS);
+    this->setBrightness(BRIGHTNESS);
+}
+
+void LedMatrix::setBrightness(uint8_t value){
+    matrix.setBrightness(value);
 }
 
 void LedMatrix::setColor(uint8_t width, uint8_t height, uint8_t red, uint8_t green, uint8_t blue) {
