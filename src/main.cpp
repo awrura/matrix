@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "matrix/matrix.h"
+#include "command/command.h"
 
 #include <Ethernet.h>
 #include <PubSubClient.h>
@@ -7,8 +8,6 @@
 #include <config.h>
 
 #define NETWORK_DELAY_MSEC 5000
-#define RGB_COLORS_COUNT 3
-#define MAX_RECEIVE_MATRIX_WIDTH 16
 #define MAX_RECEIVE_BUFFER_SIZE 2048
 
 WiFiClient espClient;
@@ -41,31 +40,9 @@ void setup_wifi() {
  *
  * Данная функция вызывается при обработке входящих сообщений
  * с MQTT брокера.
- * Итерируясь по набору байтов сериализует их в цвет. Каждая группа из 
- * 3 байтов считается за RGB цвет. При сериализации цвета устанавливает
- * цвет для текущей ячейки. 
- * После этого текущая просматриваемая ячейка изменяется (на следующую по горизонтали). 
- * Заполнение идет построчно-итеративно
- * Только при заполнении одной строки начинается заполнение следующей
  */
 void callback(char *topic, byte *payload, int length) {
-    byte tmpMod;
-    byte oneCellRGB[RGB_COLORS_COUNT];
-    int height = 0, width = 0;
-    for (int receivedByteIndex = 0; receivedByteIndex < length; receivedByteIndex++) {
-        tmpMod = receivedByteIndex % 3;
-        if (receivedByteIndex > 0 && tmpMod == 0) {
-            led_matrix.setColor(height, width, oneCellRGB[0], oneCellRGB[1], oneCellRGB[2]);
-            width ++;
-            if (width == MAX_RECEIVE_MATRIX_WIDTH)
-            {
-              height ++;
-              width = 0;
-            }
-        }
-        oneCellRGB[tmpMod] = payload[receivedByteIndex];
-    }
-    led_matrix.redraw();
+    draw(&led_matrix, payload, length);
 }
 
 
