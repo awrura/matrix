@@ -42,7 +42,17 @@ void setup_wifi() {
  * с MQTT брокера.
  */
 void callback(char *topic, byte *payload, int length) {
-    draw(&led_matrix, payload, length);
+    // Команда находится в первом байте
+    byte command = payload[0];
+
+    switch (command) {
+        case 1:
+            draw(&led_matrix, payload, length);
+            break;
+        default:
+            Serial.println("Unknown command");
+            break;
+    }
 }
 
 
