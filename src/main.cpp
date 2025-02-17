@@ -53,8 +53,11 @@ void callback(char *topic, byte *payload, int length) {
         case 1:
             draw(&led_matrix, payload, length);
             break;
+        case 2:
+           setBrightness(&led_matrix, payload[0]);
+           break;
         default:
-            Serial.println("Unknown command");
+            Serial.printf("Unknown command");
             break;
     }
 }

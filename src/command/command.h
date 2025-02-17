@@ -14,5 +14,12 @@
  */
 void draw(LedMatrix* matrix, byte *payload, int length);
 
+/*
+ * @brief Установить яркость матрицы
+ *
+ * Яркость устанавливается в пределах [0; 255]
+ */
+void setBrightness(LedMatrix* matrix, byte value);
+
 #endif // COMMAND_H
 
