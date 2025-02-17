@@ -50,10 +50,10 @@ void callback(char *topic, byte *payload, int length) {
     length--;
 
     switch (command) {
-        case 1:
+        case DRAW_COMMAND:
             draw(&led_matrix, payload, length);
             break;
-        case 2:
+        case BRIGHTNESS_COMMAND:
            setBrightness(&led_matrix, payload[0]);
            break;
         default:

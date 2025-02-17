@@ -2,6 +2,9 @@
 #define COMMAND_H
 #include "matrix/matrix.h"
 
+#define DRAW_COMMAND 1
+#define BRIGHTNESS_COMMAND 2
+
 /*
  * @brief Команда отрисовки картинки на матрице
  *
