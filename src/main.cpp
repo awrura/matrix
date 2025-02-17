@@ -45,6 +45,10 @@ void callback(char *topic, byte *payload, int length) {
     // Команда находится в первом байте
     byte command = payload[0];
 
+    // Обрезание мета информации
+    payload++;
+    length--;
+
     switch (command) {
         case 1:
             draw(&led_matrix, payload, length);
