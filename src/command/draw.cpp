@@ -8,7 +8,7 @@ void draw(LedMatrix* matrix, byte* payload, int length) {
     byte oneCellRGB[RGB_COLORS_COUNT];
     int height = 0, width = 0;
     for (int receivedByteIndex = 0; receivedByteIndex < length; receivedByteIndex++) {
-        tmpMod = receivedByteIndex % 3;
+        tmpMod = receivedByteIndex % RGB_COLORS_COUNT;
         if (receivedByteIndex > 0 && tmpMod == 0) {
             matrix->setColor(height, width, oneCellRGB[0], oneCellRGB[1], oneCellRGB[2]);
             width ++;
