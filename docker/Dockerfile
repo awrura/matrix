@@ -7,10 +7,12 @@ RUN python3 -m pip install -U platformio==${PLATFORMIO_VERSION}
 WORKDIR /opt
 
 COPY ./include/ /opt/include/
-COPY ./lib/ /opt/lib/
-COPY ./src/ /opt/src/
 COPY ./test/ /opt/test/
+COPY ./lib/ /opt/lib/
 COPY ./CMakeLists.txt ./platformio.ini /opt/
+COPY ./src/ /opt/src/
+
+RUN platformio pkg install
 
 ENTRYPOINT ["platformio"]
 
